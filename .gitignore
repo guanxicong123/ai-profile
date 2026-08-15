@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+.DS_Store
+*.tsbuildinfo
+data/*.db
+data/*.db-*
+data/uploads/
+data/pdf/
+.env
+.env.local
+*.log
+_page_*.png
+_resume_text.txt
