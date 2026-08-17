@@ -21,6 +21,7 @@ import {
 import { EyeOutlined, DownloadOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import type { GenerateResponse, ProjectScore } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 const { TextArea } = Input;
 
@@ -36,7 +37,7 @@ export default function WorkbenchPage() {
     setLoading(true);
     setResult(null);
     try {
-      const res = await fetch("/api/generate", {
+      const res = await fetch(apiUrl("/api/generate"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -161,7 +162,7 @@ export default function WorkbenchPage() {
                 </Button>
                 <Button
                   icon={<DownloadOutlined />}
-                  onClick={() => window.open(`/api/generated/${result.sessionId}/pdf`)}
+                  onClick={() => window.open(apiUrl(`/api/generated/${result.sessionId}/pdf`))}
                 >
                   下载 PDF
                 </Button>

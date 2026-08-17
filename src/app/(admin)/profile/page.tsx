@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Form, Input, Button, message, Spin } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import type { Profile } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 const { TextArea } = Input;
 
@@ -14,7 +15,7 @@ export default function ProfilePage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/profile");
+      const res = await fetch(apiUrl("/api/profile"));
       if (res.ok) {
         const data: Profile = await res.json();
         form.setFieldsValue(data);
@@ -30,7 +31,7 @@ export default function ProfilePage() {
     const values = await form.validateFields();
     setSaving(true);
     try {
-      const res = await fetch("/api/profile", {
+      const res = await fetch(apiUrl("/api/profile"), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),

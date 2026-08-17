@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Form, Input, Button, message, Spin } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import type { Education } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 export default function EducationPage() {
   const [form] = Form.useForm();
@@ -12,7 +13,7 @@ export default function EducationPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/education");
+      const res = await fetch(apiUrl("/api/education"));
       if (res.ok) {
         const data: Education = await res.json();
         form.setFieldsValue(data);
@@ -28,7 +29,7 @@ export default function EducationPage() {
     const values = await form.validateFields();
     setSaving(true);
     try {
-      const res = await fetch("/api/education", {
+      const res = await fetch(apiUrl("/api/education"), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),

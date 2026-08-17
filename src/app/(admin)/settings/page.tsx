@@ -4,7 +4,8 @@ import {
   Card, Form, Input, InputNumber, Button, Select, Space, message, Spin, Alert,
 } from "antd";
 import { SaveOutlined, ApiOutlined } from "@ant-design/icons";
-import type { Settings, ProviderKind } from "@/lib/types";
+import type { Settings } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 export default function SettingsPage() {
   const [form] = Form.useForm();
@@ -16,7 +17,7 @@ export default function SettingsPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/settings");
+      const res = await fetch(apiUrl("/api/settings"));
       if (res.ok) {
         const data: Settings = await res.json();
         form.setFieldsValue({
@@ -45,7 +46,7 @@ export default function SettingsPage() {
         },
         projectCount: values.projectCount,
       };
-      const res = await fetch("/api/settings", {
+      const res = await fetch(apiUrl("/api/settings"), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -62,7 +63,7 @@ export default function SettingsPage() {
     setTesting(true);
     setTestResult(null);
     try {
-      const res = await fetch("/api/settings/test", {
+      const res = await fetch(apiUrl("/api/settings/test"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

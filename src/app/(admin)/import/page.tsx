@@ -5,6 +5,7 @@ import {
 } from "antd";
 import { InboxOutlined, ImportOutlined } from "@ant-design/icons";
 import type { ProjectInput } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 const { Dragger } = Upload;
 
@@ -39,7 +40,7 @@ export default function ImportPage() {
       try {
         const fd = new FormData();
         fd.append("file", file);
-        const res = await fetch("/api/import", { method: "POST", body: fd });
+        const res = await fetch(apiUrl("/api/import"), { method: "POST", body: fd });
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
         const list: Row[] = (data.projects || []).map((p: ProjectInput, i: number) => ({
@@ -65,7 +66,7 @@ export default function ImportPage() {
         const row = projects.find((p) => p._key === key);
         if (!row) continue;
         const { _key, ...payload } = row;
-        await fetch("/api/projects", {
+        await fetch(apiUrl("/api/projects"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),

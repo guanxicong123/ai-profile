@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Tabs, Input, Button, Space, message, Popconfirm, Spin } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { Skill, SkillCategory } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 const CATEGORIES: { key: SkillCategory; label: string }[] = [
   { key: "frontend", label: "前端" },
@@ -20,7 +21,7 @@ export default function SkillsPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/skills");
+      const res = await fetch(apiUrl("/api/skills"));
       if (res.ok) setSkills(await res.json());
     } finally {
       setLoading(false);
@@ -30,7 +31,7 @@ export default function SkillsPage() {
 
   const add = async () => {
     if (!newContent.trim()) return;
-    const res = await fetch("/api/skills", {
+    const res = await fetch(apiUrl("/api/skills"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ category: active, content: newContent.trim() }),
@@ -43,7 +44,7 @@ export default function SkillsPage() {
   };
 
   const remove = async (id: number) => {
-    const res = await fetch(`/api/skills/${id}`, { method: "DELETE" });
+    const res = await fetch(apiUrl(`/api/skills/${id}`), { method: "DELETE" });
     if (res.ok) { message.success("已删除"); load(); }
   };
 

@@ -5,6 +5,7 @@ import {
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { WorkExperience, WorkInput } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 const { TextArea } = Input;
 
@@ -29,7 +30,7 @@ export default function WorkPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/work");
+      const res = await fetch(apiUrl("/api/work"));
       if (res.ok) setData(await res.json());
     } finally {
       setLoading(false);
@@ -55,7 +56,7 @@ export default function WorkPage() {
   };
 
   const onDelete = async (id: number) => {
-    const res = await fetch(`/api/work/${id}`, { method: "DELETE" });
+    const res = await fetch(apiUrl(`/api/work/${id}`), { method: "DELETE" });
     if (res.ok) { message.success("已删除"); load(); }
   };
 
@@ -68,7 +69,7 @@ export default function WorkPage() {
     };
     const url = editing ? `/api/work/${editing.id}` : "/api/work";
     const method = editing ? "PUT" : "POST";
-    const res = await fetch(url, {
+    const res = await fetch(apiUrl(url), {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

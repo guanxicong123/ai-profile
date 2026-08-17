@@ -4,6 +4,7 @@ import { Card, Table, Button, Space, Popconfirm, message, Tag } from "antd";
 import { EyeOutlined, DownloadOutlined, DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import type { GeneratedResume } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 export default function HistoryPage() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function HistoryPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/generated");
+      const res = await fetch(apiUrl("/api/generated"));
       if (res.ok) setData(await res.json());
     } finally {
       setLoading(false);
@@ -23,7 +24,7 @@ export default function HistoryPage() {
   useEffect(() => { load(); }, []);
 
   const del = async (id: number) => {
-    const res = await fetch(`/api/generated/${id}`, { method: "DELETE" });
+    const res = await fetch(apiUrl(`/api/generated/${id}`), { method: "DELETE" });
     if (res.ok) { message.success("已删除"); load(); }
   };
 
@@ -46,7 +47,7 @@ export default function HistoryPage() {
       render: (_: any, r: GeneratedResume) => (
         <Space>
           <Button size="small" icon={<EyeOutlined />} onClick={() => router.push(`/preview/${r.id}`)}>预览</Button>
-          <Button size="small" icon={<DownloadOutlined />} onClick={() => window.open(`/api/generated/${r.id}/pdf`)}>PDF</Button>
+          <Button size="small" icon={<DownloadOutlined />} onClick={() => window.open(apiUrl(`/api/generated/${r.id}/pdf`))}>PDF</Button>
           <Popconfirm title="确认删除？" onConfirm={() => del(r.id)}>
             <Button size="small" danger icon={<DeleteOutlined />}>删除</Button>
           </Popconfirm>

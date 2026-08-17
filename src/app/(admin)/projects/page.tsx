@@ -18,6 +18,7 @@ import {
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import type { Project, ProjectInput } from "@/lib/types";
+import { apiUrl } from "@/lib/client-base";
 
 const { TextArea } = Input;
 
@@ -52,7 +53,7 @@ export default function ProjectsPage() {
       if (q) params.set("q", q);
       if (domain) params.set("domain", domain);
       params.set("archived", "false");
-      const res = await fetch(`/api/projects?${params.toString()}`);
+      const res = await fetch(apiUrl(`/api/projects?${params.toString()}`));
       if (res.ok) setData(await res.json());
     } finally {
       setLoading(false);
@@ -88,7 +89,7 @@ export default function ProjectsPage() {
   };
 
   const onDelete = async (id: number) => {
-    const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+    const res = await fetch(apiUrl(`/api/projects/${id}`), { method: "DELETE" });
     if (res.ok) {
       message.success("已删除");
       load();
@@ -107,7 +108,7 @@ export default function ProjectsPage() {
     };
     const url = editing ? `/api/projects/${editing.id}` : "/api/projects";
     const method = editing ? "PUT" : "POST";
-    const res = await fetch(url, {
+    const res = await fetch(apiUrl(url), {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
