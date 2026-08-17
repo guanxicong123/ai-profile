@@ -475,6 +475,22 @@ export function setGeneratedPdfPath(id: number, pdfPath: string): void {
   getDb().prepare("UPDATE generated_resumes SET pdf_path = ? WHERE id = ?").run(pdfPath, id);
 }
 
+/**
+ * 回写编辑后的简历正文（预览页整份编辑后保存）。
+ * 只更新 document 字段；generated_resumes 无 updated_at，不改时间戳。
+ * 记录不存在返回 null。
+ */
+export function updateGenerated(
+  id: number,
+  patch: { document: ResumeDocument }
+): GeneratedResume | null {
+  const info = getDb()
+    .prepare("UPDATE generated_resumes SET document = ? WHERE id = ?")
+    .run(JSON.stringify(patch.document), id);
+  if (info.changes === 0) return null;
+  return getGenerated(id);
+}
+
 /* -------------------------------- settings -------------------------------- */
 
 export function getSetting(key: string): string | null {
